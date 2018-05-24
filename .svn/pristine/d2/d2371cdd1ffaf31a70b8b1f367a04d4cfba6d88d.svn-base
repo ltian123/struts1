@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN" "http://struts.apache.org/dtds/struts-config_1_2.dtd">
+
+<struts-config>
+  <data-sources />
+  <form-beans >
+  	<!-- 定义一个ActionForm的变量名 type表示该form的路径名-->
+  	<form-bean name="registForm" type="form.RegistForm"></form-bean>
+  </form-beans>
+  
+  <global-exceptions />
+  <global-forwards />
+  <action-mappings >
+  	<!-- path就相當於url-pattern type表示该action所对应的Action类路径-->
+  	<action path="/hello" type="action.HelloAction">
+  		<!-- name表示action中的返回值  path表示需要跳转的界面-->
+  		<forward name="success" path="/hello.jsp"></forward>
+  	</action>
+  	
+  	<!-- 访问WEB-INF下的咨询,需要配置转发 -->
+  	<action path="/showRegist" forward="/WEB-INF/pages/regist.jsp"></action>
+  	
+  	<action path="/showSuccess" forward="/WEB-INF/pages/success.jsp"></action>
+  	
+  	<!-- 实现注册功能 name表示指定一个form-bean -->
+  	<action path="/regist" type="action.RegistAction" name="registForm" input="/WEB-INF/pages/regist.jsp">
+  		
+  		<!-- 当出现异常的时候,找不到对应的返回值,会进入到input定义的路径中
+  			错误的消息会在message-resources标签中配置properties
+  			配置如果出现异常返回什么信息
+  		 -->
+  		<exception key="userExist" type="exception.UserExistException"></exception>
+  	
+  		<!-- 如果返回值是success进入下面标签 name表示返回值 path表示返回的界面
+  			redirect="true"使用重定向的方式跳转
+  			不写这个配置默认是redirect="false"表示使用转发
+  		 -->
+  		<forward name="success" path="/showSuccess.do" redirect="true"></forward>
+  		
+  		<!-- 如果返回值是fail进入下面标签  -->
+  		<forward name="fail" path="/WEB-INF/pages/regist.jsp"></forward>
+  	</action>
+  	
+  	<!-- DispatchAction -->
+<!--   	<action path="/add" type="action.UserAction" parameter="aaa"></action> -->
+<!--   	<action path="/add" type="action.UserAction" parameter="aaa"></action> -->
+<!--   	<action path="/add" type="action.UserAction" parameter="aaa"></action> -->
+<!--   	<action path="/add" type="action.UserAction" parameter="aaa"></action> -->
+  	
+  	
+  	<!-- MappingDispatchAction
+  		path:url-pattern
+  		type:类路径
+  		paramter:方法名
+  	 -->
+  	<action path="/save" type="action.ProductAction" parameter="save"></action>
+  	<action path="/remove" type="action.ProductAction" parameter="remove"></action>
+  	<action path="/modify" type="action.ProductAction" parameter="modify"></action>
+  	<action path="/find" type="action.ProductAction" parameter="find"></action>
+  
+  </action-mappings>
+  <message-resources parameter="struts.ApplicationResources" />
+</struts-config>
+
